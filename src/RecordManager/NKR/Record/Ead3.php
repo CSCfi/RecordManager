@@ -60,6 +60,12 @@ class Ead3 extends \RecordManager\Finna\Record\Ead3
     {
         $data = parent::toSolrArray($db);
         $data['_document_id'] = $this->getUnitId();
+        if (empty($data['_document_id'])) {
+            $this->logger->logError(
+                'toSolrArray',
+                "Failed to parse identifier, record: " . $this->doc->asXML()
+            );
+        }
         
         $harvest_mode = $this->getDriverParam('harvest_mode', 'unset');
         if ($harvest_mode === 'unset') {
